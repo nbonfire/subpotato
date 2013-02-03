@@ -4,15 +4,28 @@
 import simplejson as json
 import urllib2
 import feedparser
+import os.path as path
 
 defaultUrl="https://couchpotato/"
     #get this from defaultUrl/docs
 defaultKey=
 defaultFeed="http://http://rss.imdb.com/user/ur#######/watchlist"
+listFilename=path.expanduser("~/subpotato/filestocopy.txt")
 
 def processFileList(filesToCopy) :
     #just print for now, eventually send to rsync
     print filesToCopy
+    with open(listFilename) as f:
+        d = {}
+        lines = f.read().split('\n')
+        print lines
+        f.close()
+        for files in filesToCopy:
+            if files not in lines:
+                lines.append(files)
+        with open(listFilename, 'w') as outputFile:
+            for line in lines:
+                outputFile.write("%s\n" % line)
 
 def subpotato(URL_BASE, API_KEY, FEED_URL) :
     
@@ -47,7 +60,7 @@ def subpotato(URL_BASE, API_KEY, FEED_URL) :
     
     
 if __name__ == "__main__" : 
-    init()
+    
     subpotato(defaultURL, defaultKey, defaultFeed)
     #TBD: actually copy the files, rsync or something.
     
