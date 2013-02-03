@@ -27,20 +27,19 @@ def subpotato(URL_BASE, API_KEY, FEED_URL) :
         movieSet.append({'title' : feedDict[j]['title'], 'id' : imdbID})
 
     #get the set of movie names available from couchpotato
-    releaseSet= set()
+    releases= set()
     for k in range(feedLength):
         url=URL_BASE+"/api/"+API_KEY+"/"+"movie.get?id="+movieSet[k]['id']
         json_string = urllib2.urlopen(url).read()
         the_data=json.loads(json_string)
-        releaseSet.append(the_data["movie"]["releases"])
+        releases.append(the_data["movie"]["releases"])
 
     #get filenames to be synced
     filesList = set()
-    for v in range(len(releaseSet)):
-        release=releaseSet[v]
-        for x in range(len(release)) :
-            for y in range(len(release[x]["files"])) :
-                filesList.append( release[x]["files"][y]["path"] )
+    for release in releases:
+        for x in release :
+            for file in x["files"] :
+                filesList.append( y["path"] )
     
     #process the list of files
     processFileList(filesList)
