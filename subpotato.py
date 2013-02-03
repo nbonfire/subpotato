@@ -14,16 +14,18 @@ listFilename=path.expanduser("~/subpotato/filestocopy.txt")
 pathPrefix="/mnt/samba/Videos/Movies"
 
 def processFileList(filesToCopy) :
-    #just print for now, eventually send to rsync
+    #open the list file, read it in
     #print filesToCopy
     with open(listFilename) as f:
         d = {}
         lines = f.read().split('\n')
         #print lines
         f.close()
+        #add unique filenames to the list 
         for files in filesToCopy:
             if files not in lines:
                 lines.append(files)
+        #rewrite the file with all unique filenames        
         with open(listFilename, 'w') as outputFile:
             for line in lines:
                 outputFile.write("%s\n" % line)
