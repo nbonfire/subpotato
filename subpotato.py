@@ -11,14 +11,15 @@ defaultUrl="https://couchpotato/"
 defaultKey=
 defaultFeed="http://http://rss.imdb.com/user/ur#######/watchlist"
 listFilename=path.expanduser("~/subpotato/filestocopy.txt")
+pathPrefix="/mnt/samba/Videos/Movies"
 
 def processFileList(filesToCopy) :
     #just print for now, eventually send to rsync
-    print filesToCopy
+    #print filesToCopy
     with open(listFilename) as f:
         d = {}
         lines = f.read().split('\n')
-        print lines
+        #print lines
         f.close()
         for files in filesToCopy:
             if files not in lines:
@@ -53,7 +54,7 @@ def subpotato(URL_BASE, API_KEY, FEED_URL) :
     for release in releases:
         for x in release :
             for filename in x["files"] :
-                filesList.append( filename["path"] )
+                filesList.append( filename["path"][len(pathPrefix):] )
     
     #process the list of files
     processFileList(filesList)
